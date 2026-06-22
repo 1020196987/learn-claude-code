@@ -1,0 +1,61 @@
+学习/16-s16-team-protocols.md
+  s_53a783b61396aa::t_025b92c80e5b9b 1-234
+学习/12-s12-task-system.md
+  s_53a783b61396aa::t_668a0db5b7b8b3 1-244
+学习/05-s05-todo-write.md
+  s_53a783b61396aa::t_c39a5f7ee60079 1-119
+学习/14-s14-cron-scheduler.md
+  s_53a783b61396aa::t_9a77b2ed34ede7 1-277
+学习/17-s17-autonomous-agents.md
+  s_53a783b61396aa::t_dcf458972f7475 1-251
+学习/19-s19-mcp-plugin.md
+  s_53a783b61396aa::t_693f679b4e1eaf 1-247
+学习/06-s06-subagent.md
+  s_53a783b61396aa::t_4bc08609a05f77 1-157
+学习/10-s10-system-prompt.md
+  s_53a783b61396aa::t_6313724659b7bd 1-200
+学习/07-s07-skill-loading.md
+  s_53a783b61396aa::t_d6375bfcd61ad9 1-189
+学习/11-s11-error-recovery.md
+  s_53a783b61396aa::t_d889cad1b81d06 1-235
+学习/08-s08-context-compact.md
+  s_53a783b61396aa::t_52b33d790ef5ce 1-261
+学习/03-s03-permission.md
+  s_53a783b61396aa::t_8a8216ae0e14a4 1-130
+学习/01-s01-agent-loop.md
+  s_53a783b61396aa::t_10dd8d8dcb2609 1-108
+学习/13-s13-background-tasks.md
+  s_53a783b61396aa::t_2970086d63ea2d 1-248
+学习/21-收尾与设计哲学.md
+  s_53a783b61396aa::t_2f7e1e040ff57d 1-270
+学习/04-s04-hooks.md
+  s_53a783b61396aa::t_52d0a981a5cc10 1-148
+学习/02-s02-tool-use.md
+  s_53a783b61396aa::t_9e8348436c1395 1-131
+学习/15-s15-agent-teams.md
+  s_53a783b61396aa::t_7e20f8cc0a6be9 1-227
+学习/00-概述.md
+  s_53a783b61396aa::t_87bb4680d75657 1-102
+学习/20-s20-comprehensive.md
+  s_53a783b61396aa::t_6f3e8dc46753e8 1-233
+学习/18-s18-worktree-isolation.md
+  s_53a783b61396aa::t_515c91917a3d9a 1-210
+学习/09-s09-memory.md
+  s_53a783b61396aa::t_f8253b5a0b7349 1-210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "dcccac9004610167fc1f75ff70b84fd7e9ca239c",
+  "prompts": {},
+  "sessions": {
+    "s_53a783b61396aa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fe532b55-a4da-42b0-a854-a24eb62e8b0d",
+        "model": "MiniMax-M3"
+      },
+      "human_author": "wangnan <wangnan@qq.com>"
+    }
+  }
+}
