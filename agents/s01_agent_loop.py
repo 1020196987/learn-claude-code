@@ -26,6 +26,7 @@ policy, hooks, and lifecycle controls on top.
 
 import os
 import subprocess
+from pathlib import Path
 
 try:
     import readline
@@ -41,12 +42,14 @@ except ImportError:
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
+# Load .env next to this script (not cwd-dependent) so the file is found
+# regardless of where the user runs python from.
+load_dotenv(Path(__file__).parent / ".env", override=True)
 
-if os.getenv("ANTHROPIC_BASE_URL"):
-    os.environ.pop("ANTHROPIC_AUTH_TOKEN", None)
+# if os.getenv("ANTHROPIC_BASE_URL"):
+#     os.environ.pop("ANTHROPIC_AUTH_TOKEN", None)
 
-client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))
+client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"), auth_token=os.getenv("ANTHROPIC_AUTH_TOKEN"))
 MODEL = os.environ["MODEL_ID"]
 
 SYSTEM = f"You are a coding agent at {os.getcwd()}. Use bash to solve tasks. Act, don't explain."
