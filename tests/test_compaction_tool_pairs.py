@@ -178,6 +178,72 @@ class CompactionToolPairTests(unittest.TestCase):
                 self.assertEqual(compacted[1], messages[3])
                 assert_no_orphan_tool_results(self, compacted)
 
+    def test_reactive_compact_summarizes_only_old_history(self):
+        messages = [
+            user_text(),
+            assistant_text(),
+            user_text(),
+            assistant_text(),
+            user_text(),
+            assistant_text(),
+            user_text(),
+            assistant_text(),
+            user_text(),
+        ]
+
+        for name, path in MODULES.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                module = load_module(f"{name}_reactive_oldhist_under_test", path, Path(tmp))
+                module.write_transcript = lambda _messages: Path("transcript.jsonl")
+                captured = {}
+
+                def fake_summarize(passed, _store=captured):
+                    _store["messages"] = list(passed)
+                    return "summary"
+
+                module.summarize_history = fake_summarize
+                compacted = module.reactive_compact(list(messages))
+                # The summary must cover only the old history, not the kept tail.
+                self.assertEqual(captured["messages"], messages[:4])
+                # The recent tail is appended verbatim after the summary message.
+                self.assertEqual(compacted[1:], messages[4:])
+                assert_no_orphan_tool_results(self, compacted)
+
+    def test_reactive_compact_summary_excludes_tail_pair_pulled_in(self):
+        # A tool_use/tool_result pair straddles the tail boundary, so the
+        # adjustment pulls the tool_use into the kept tail. The summary must
+        # cover only what stays trimmed (messages[:adjusted_tail_start]), i.e.
+        # it must not re-summarize the tool_use that is kept verbatim.
+        messages = [
+            user_text(),
+            assistant_text(),
+            user_text(),
+            tool_use_message("reactive-tool"),
+            tool_result_message("reactive-tool"),
+            assistant_text(),
+            user_text(),
+            assistant_text(),
+            user_text(),
+        ]
+
+        for name, path in MODULES.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                module = load_module(f"{name}_reactive_pairscope_under_test", path, Path(tmp))
+                module.write_transcript = lambda _messages: Path("transcript.jsonl")
+                captured = {}
+
+                def fake_summarize(passed, _store=captured):
+                    _store["messages"] = list(passed)
+                    return "summary"
+
+                module.summarize_history = fake_summarize
+                compacted = module.reactive_compact(list(messages))
+                # tail_start starts at 4, decrements to 3 to keep the pair intact.
+                self.assertEqual(captured["messages"], messages[:3])
+                self.assertEqual(compacted[1], messages[3])
+                self.assertEqual(compacted[1:], messages[3:])
+                assert_no_orphan_tool_results(self, compacted)
+
     def test_s20_has_tool_use_still_accepts_content_blocks(self):
         with tempfile.TemporaryDirectory() as tmp:
             module = load_module("s20_has_tool_use_under_test", MODULES["s20"], Path(tmp))
