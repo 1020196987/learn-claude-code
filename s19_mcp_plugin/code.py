@@ -252,7 +252,7 @@ PROMPT_SECTIONS = {
              "spawn_teammate, send_message, check_inbox, "
              "request_shutdown, request_plan, review_plan, "
              "create_worktree, remove_worktree, keep_worktree, "
-             "connect_mcp. MCP tools are prefixed mcp__{server}__{tool}.",
+             "connect_mcp. MCP tools are prefixed mcp__{server}__{tool}.", # MCP 外部工具的命名格式是 mcp__服务名__工具名，避免工具名冲突
     "workspace": f"Working directory: {WORKDIR}",
     "memory": "Relevant memories are injected below when available.",
 }

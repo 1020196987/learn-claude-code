@@ -26,19 +26,28 @@ from pathlib import Path
 from anthropic import Anthropic
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
-
-if os.getenv("ANTHROPIC_BASE_URL"):
-    os.environ.pop("ANTHROPIC_AUTH_TOKEN", None)
+load_dotenv(Path(__file__).parent / ".env", override=True)
 
 WORKDIR = Path.cwd()
-client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))
+client = Anthropic(
+    base_url=os.getenv("ANTHROPIC_BASE_URL"),
+    auth_token=os.getenv("ANTHROPIC_AUTH_TOKEN"),
+)
 MODEL = os.environ["MODEL_ID"]
 
 SYSTEM = f"You are a coding agent at {WORKDIR}. Use tools to solve tasks. Act, don't explain."
 
 
 def safe_path(p: str) -> Path:
+    # 这里的 `/` 不是数学除法，而是 `pathlib.Path` 里的路径拼接语法。
+    # 比如：
+    # ```python
+    # WORKDIR / "agents/s01_agent_loop.py"
+    # ```
+    # 等价于：
+    # ```text
+    # /Users/xxx/learn-claude-code/agents/s01_agent_loop.py
+    # ```
     path = (WORKDIR / p).resolve()
     if not path.is_relative_to(WORKDIR):
         raise ValueError(f"Path escapes workspace: {p}")
