@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SSE Permission Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 700px;
+        margin: 40px auto;
+      }
+
+      button {
+        margin-right: 8px;
+      }
+
+      .log {
+        padding: 8px;
+        margin: 8px 0;
+        background: #f3f4f6;
+        border-radius: 6px;
+      }
+
+      .permission {
+        padding: 12px;
+        margin: 12px 0;
+        background: #fffbeb;
+        border: 1px solid #f59e0b;
+        border-radius: 8px;
+      }
+
+      pre {
+        background: #111827;
+        color: white;
+        padding: 8px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>SSE Permission Demo</h1>
+
+    <button id="start">启动任务</button>
+
+    <div id="logs"></div>
+
+    <script>
+      const logs = document.getElementById("logs");
+      const startButton = document.getElementById("start");
+
+      /**
+       * 连接 SSE。
+       */
+      const eventSource = new EventSource("http://localhost:3000/events");
+
+      eventSource.onmessage = (message) => {
+        const event = JSON.parse(message.data);
+
+        if (event.type === "connected") {
+          appendLog("系统", event.message);
+        }
+
+        if (event.type === "message") {
+          appendLog(event.role, event.content);
+        }
+
+        if (event.type === "permission_request") {
+          renderPermission(event);
+        }
+      };
+
+      eventSource.onerror = () => {
+        appendLog("系统", "SSE 连接异常，浏览器会自动重连。");
+      };
+
+      /**
+       * 启动后端模拟任务。
+       */
+      startButton.onclick = async () => {
+        await fetch("http://localhost:3000/start", {
+          method: "POST",
+        });
+
+        appendLog("用户", "启动任务");
+      };
+
+      /**
+       * 渲染权限确认卡片。
+       */
+      function renderPermission(event) {
+        const div = document.createElement("div");
+        div.className = "permission";
+
+        div.innerHTML = `
+          <h3>需要确认</h3>
+          <p>原因：${event.reason}</p>
+          <p>工具：${event.toolName}</p>
+          <pre>${JSON.stringify(event.args, null, 2)}</pre>
+          <button id="allow">允许</button>
+          <button id="deny">拒绝</button>
+        `;
+
+        logs.appendChild(div);
+
+        div.querySelector("#allow").onclick = async () => {
+          await respond(event.requestId, "allow");
+          div.remove();
+          appendLog("用户", "允许执行");
+        };
+
+        div.querySelector("#deny").onclick = async () => {
+          await respond(event.requestId, "deny");
+          div.remove();
+          appendLog("用户", "拒绝执行");
+        };
+      }
+
+      /**
+       * 把用户选择 POST 回后端。
+       */
+      async function respond(requestId, decision) {
+        await fetch("http://localhost:3000/respond", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            requestId,
+            decision,
+          }),
+        });
+      }
+
+      function appendLog(role, content) {
+        const div = document.createElement("div");
+        div.className = "log";
+        div.textContent = `${role}: ${content}`;
+        logs.appendChild(div);
+      }
+    </script>
+  </body>
+</html>

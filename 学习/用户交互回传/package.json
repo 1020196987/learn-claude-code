@@ -1,0 +1,14 @@
+{
+  "name": "user-interaction-demo",
+  "version": "1.0.0",
+  "description": "用户交互回传 demo：SSE + 权限确认",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}
