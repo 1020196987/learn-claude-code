@@ -1,0 +1,33 @@
+.gitignore
+  h_bb5a38810b7929 6
+  s_97112469265c18::t_41d63370efe3fc 225-227
+学习/用户交互回传/web.html
+  h_bb5a38810b7929 1-143
+学习/用户交互回传/server.js
+  h_bb5a38810b7929 1-155
+学习/用户交互回传/package-lock.json
+  s_97112469265c18::t_f0d5fca2570153 1-889
+学习/用户交互回传/package.json
+  s_97112469265c18::t_ba5d2e2e5413b2 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "5e56482b54348f4aedae22425bdcbc3d3b1b2018",
+  "prompts": {},
+  "humans": {
+    "h_bb5a38810b7929": {
+      "author": "wangnan <wangnan@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_97112469265c18": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c1e88bc1-5b2b-4a88-a9c5-86e49b167891",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "wangnan <wangnan@qq.com>"
+    }
+  }
+}
