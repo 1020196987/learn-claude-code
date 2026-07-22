@@ -1,3 +1,29 @@
+/**
+用户：帮我删除 test.txt
+  ↓
+Agent Runtime 把用户消息发给大模型
+  ↓
+大模型返回：
+  tool_use: bash({ command: "rm test.txt" })
+  ↓
+Agent Runtime 准备执行 bash 工具
+  ↓
+Agent Runtime 调用 checkPermission(...)
+  ↓
+发现是 rm 命令，需要确认
+  ↓
+Agent Runtime 调用 askPermission(...)
+  ↓
+后端通过 SSE 推送 permission_request 给前端
+  ↓
+用户点击允许 / 拒绝
+  ↓
+askPermission 的 Promise resolve
+  ↓
+如果允许：执行 bash
+如果拒绝：返回 Permission denied 的 tool_result 给大模型
+*/
+
 const express = require("express");
 const cors = require("cors");
 const { randomUUID } = require("crypto");
