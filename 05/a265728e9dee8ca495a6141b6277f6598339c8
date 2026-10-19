@@ -1,0 +1,29 @@
+s01_agent_loop/code.py
+  h_bb5a38810b7929 28-29,48-49,57,59-63,80,97-102,104-111,125-130,132-137,179-181
+  h_bb5a38810b7929 58
+笔记/opik.md
+  h_bb5a38810b7929 1-384
+requirements.txt
+  s_d2ed93fd26b38d::t_97681bd9fb4781 2,5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "05a265728e9dee8ca495a6141b6277f6598339c8",
+  "prompts": {},
+  "humans": {
+    "h_bb5a38810b7929": {
+      "author": "wangnan <wangnan@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_d2ed93fd26b38d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11f88-e754-7152-bd7b-0c24d735448b",
+        "model": "unknown"
+      },
+      "human_author": "wangnan <wangnan@qq.com>"
+    }
+  }
+}
