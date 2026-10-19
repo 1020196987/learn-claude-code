@@ -1,0 +1,52 @@
+s01_agent_loop/code.py
+  h_bb5a38810b7929 65-74
+s02_tool_use/code.py
+  h_bb5a38810b7929 48-58
+s03_permission/code.py
+  h_bb5a38810b7929 59-69
+s04_hooks/code.py
+  h_bb5a38810b7929 48-57
+s05_todo_write/code.py
+  h_bb5a38810b7929 50-55,57
+s06_subagent/code.py
+  h_bb5a38810b7929 46-51,53,57
+s07_skill_loading/README.ja.md
+  h_bb5a38810b7929 93-99,102-103
+s07_skill_loading/README.md
+  h_bb5a38810b7929 93-99,102-103
+s07_skill_loading/README.zh.md
+  h_bb5a38810b7929 93-99,102-103
+s07_skill_loading/code.py
+  h_bb5a38810b7929 49-54,136-137
+s08_context_compact/code.py
+  h_bb5a38810b7929 69-74,76-77
+s09_memory/code.py
+  h_bb5a38810b7929 41-46,341
+s10_task_system/code.py
+  h_bb5a38810b7929 54-59,61
+s11_background_tasks/code.py
+  h_bb5a38810b7929 45-50,52-53,65-86,113-114,122
+s12_cron_scheduler/code.py
+  h_bb5a38810b7929 49-54,56-57
+s13_agent_teams/code.py
+  h_bb5a38810b7929 623-628,630
+s14_mcp_plugin/code.py
+  h_bb5a38810b7929 48-53,55-56
+s15_integrated_harness/code.py
+  h_bb5a38810b7929 39-43,166-169,178-179,797-802,804,887-906,935-936,940-941,1872
+s16_workflow_runtime/code.py
+  h_bb5a38810b7929 35-42,302-304
+s17_goal_loop/code.py
+  h_bb5a38810b7929 46-51,697-698
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb0af3515302bf6c264d950b40b625ec1c3bdc4e",
+  "prompts": {},
+  "humans": {
+    "h_bb5a38810b7929": {
+      "author": "wangnan <wangnan@qq.com>"
+    }
+  }
+}
