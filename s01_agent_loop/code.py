@@ -25,7 +25,8 @@ until the model decides to stop. Later chapters add policy,
 hooks, and lifecycle controls around it.
 
 Usage:
-    pip install anthropic python-dotenv
+    pip install -r requirements.txt
+    opik configure
     ANTHROPIC_API_KEY=... python s01_agent_loop/code.py
 """
 
@@ -44,14 +45,22 @@ except ImportError:
 
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from opik import flush_tracker, opik_context, track
+from opik.integrations.anthropic import track_anthropic
 
 load_dotenv(override=True)
 
 if os.getenv("ANTHROPIC_BASE_URL"):
     os.environ.pop("ANTHROPIC_AUTH_TOKEN", None)
 
-client = Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL"))
 MODEL = os.environ["MODEL_ID"]
+OPIK_PROJECT_NAME = os.getenv("OPIK_PROJECT_NAME", "learn-claude-code-s01")
+
+# 包装 Anthropic 客户端后，每次模型调用都会自动记录输入、输出、Token 和耗时。
+client = track_anthropic(
+    Anthropic(base_url=os.getenv("ANTHROPIC_BASE_URL")),
+    project_name=OPIK_PROJECT_NAME,
+)
 
 SYSTEM = f"You are a coding agent at {os.getcwd()}. Use bash to solve tasks. Act, don't explain."
 
@@ -68,6 +77,7 @@ TOOLS = [{
 
 
 # -- Tool execution --
+@track(type="tool", project_name=OPIK_PROJECT_NAME)
 def run_bash(command: str) -> str:
     dangerous = ["rm -rf /", "sudo", "shutdown", "reboot", "> /dev/"]
     if any(d in command for d in dangerous):
@@ -84,7 +94,21 @@ def run_bash(command: str) -> str:
 
 
 # -- The core pattern: a while loop that calls tools until the model stops --
+@track(
+    name="agent_loop",
+    project_name=OPIK_PROJECT_NAME,
+    capture_input=False,
+    capture_output=False,
+)
 def agent_loop(messages: list):
+    # 只把本轮问题放到根 trace，避免每轮重复上传完整会话历史。
+    latest_message = messages[-1]["content"] if messages else ""
+    opik_context.update_current_trace(
+        input={"query": latest_message},
+        metadata={"model": MODEL},
+        tags=["s01", "agent-loop"],
+    )
+
     while True:
         response = client.messages.create(
             model=MODEL, system=SYSTEM, messages=messages,
@@ -98,7 +122,19 @@ def agent_loop(messages: list):
         tool_calls = [
             block for block in response.content if block.type == "tool_use"
         ]
+        # 这是 Python 的列表推导式（list comprehension），等价于：
+        # tool_calls = []
+        # for block in response.content:
+        #     if block.type == "tool_use":
+        #         tool_calls.append(block)
+                
         if not tool_calls:
+            final_text = "\n".join(
+                block.text
+                for block in response.content
+                if getattr(block, "type", None) == "text"
+            )
+            opik_context.update_current_trace(output={"answer": final_text})
             return
 
         # Execute each tool call, collect results
@@ -140,3 +176,6 @@ if __name__ == "__main__":
                 if getattr(block, "type", None) == "text":
                     print(block.text)
         print()
+
+    # Opik 默认批量上报数据，退出交互程序前确保最后一批 Trace 已发送。
+    flush_tracker()
